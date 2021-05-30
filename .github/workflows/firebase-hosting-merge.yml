@@ -21,7 +21,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@master
         with:
-          node-version: '10.x'
+          node-version: '12.x'
       # Install the dependencies need to build the app
       - name: Install Dependencies
         run: npm install
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
         with:
-          node-version: '10.x'
+          node-version: '12.x'
       # Install the dependencies need to build the app
       - name: Install Dependencies
         run: npm install
