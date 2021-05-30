@@ -1,0 +1,120 @@
+.container {
+  padding: 20px;
+  display: flex;
+
+  align-items: center;
+  flex-direction: column;
+
+  .states, .districts {
+    width: 35%;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+}
+
+.calender-text {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 18px !important;
+  font-weight: bold !important;
+}
+
+.calender {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+
+  .dates {
+    box-sizing: border-box;
+    font-weight: 900;
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    background-color: #e0e0e0;
+
+    &.highlight {
+      border: 5px #3f51b5 solid !important;
+    }
+  }
+}
+
+.available-slots {
+  margin: 20px;
+  padding: 15px;
+
+  .refresh-countdown {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px;
+  }
+
+  .filters {
+    margin: 15px;
+    padding: 10px;
+    mat-chip {
+      &.active {
+        background-color: #3f51b5;
+        color: #fff;
+      }
+    }
+  }
+
+  .total {
+    font-size: 6fr;
+    font-weight: 900;
+    margin: 20px;
+  }
+
+  .card {
+    margin: 10px;
+
+    .card-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .section-one{
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+
+        p {
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+      .section-two{
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        p {
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@media only screen and (max-width: 600px) {
+  .states, .districts {
+    width: 100% !important;
+  }
+  .calender {
+  .dates {
+    height: 60px !important;
+    width: 60px !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+  }
+}
+}

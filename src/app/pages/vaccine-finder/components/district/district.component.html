@@ -1,0 +1,143 @@
+<div class="container">
+  <h2>Find Vaccine By District</h2>
+
+  <div class="states" *ngIf="listOfStates$ | async as listOfStates">
+    <p>Choose your State</p>
+    <ng-container *ngIf="!(listOfStates | isEmpty)">
+      <mat-form-field appearance="fill">
+        <mat-label>Selected State</mat-label>
+        <mat-select
+          [(ngModel)]="selectedState"
+          name="states"
+          (selectionChange)="newSelectedState()"
+        >
+          <mat-option *ngFor="let states of listOfStates" [value]="states">
+            {{ states?.stateName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+  </div>
+
+  <div class="districts" *ngIf="listOfDistricts$ | async as listOfDistricts">
+    <ng-container *ngIf="!(listOfDistricts | isEmpty)">
+      <p>Choose your District</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Selected District</mat-label>
+        <mat-select
+          [(ngModel)]="selectedDistrict"
+          name="district"
+          (selectionChange)="newSelectedDistrict()"
+        >
+          <mat-option
+            *ngFor="let district of listOfDistricts"
+            [value]="district"
+          >
+            {{ district?.districtName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+  </div>
+
+  <div class="calender" *ngIf="!(selectedDistrict?.districtName | isEmpty)">
+    <button
+    *ngIf="initalDay > 1"
+    mat-flat-button
+    class="dates"
+    (click)="prevCalenderDays()"
+  >
+   PREV
+  </button>
+    <button
+      mat-flat-button
+      class="dates"
+      [ngClass]="{ highlight: date === selectedDate }"
+      *ngFor="let date of calender"
+      (click)="newSelectedDate(date)"
+    >
+      {{ date | slice: 0:5 }}
+    </button>
+
+    <button
+    *ngIf="initalDay < 22"
+      mat-flat-button
+      class="dates"
+      (click)="nextCalenderDays()"
+    >
+     NEXT
+    </button>
+
+  </div>
+
+  <div class="action-bar" *ngIf="!(selectedDistrict?.districtName | isEmpty)">
+    <button
+      mat-stroked-button
+      class="large"
+      color="primary"
+      (click)="getSlots()"
+    >
+      Search
+    </button>
+  </div>
+
+
+
+  <div
+    class="available-slots"
+    *ngIf="listofAvailableSlots$ | async as availableSlotData"
+  >
+    <div *ngIf="!(availableSlotData | isEmpty) && hasSeached">
+
+      <div class="refresh-countdown">
+        Data refreshing in <countdown #cd [config]="countDownConfig"></countdown> seconds.
+      </div>
+      <div class="filters">
+        <mat-chip-list aria-label="Filters selection">
+          <ng-container *ngFor="let item of filters">
+            <mat-chip (click)="filterAction(item?.name)" [ngClass]="{'active': isFilterApplied(item?.name)}">{{item?.label}}</mat-chip>
+          </ng-container>
+        </mat-chip-list>
+      </div>
+      <span class="total"
+        >Total Available Vaccine:
+        {{ availableSlotData?.totalSlotsAvailable }}</span
+      >
+      <div *ngFor="let slotDetails of availableSlotData?.slotsDetails | dataFilter: selectedFilters | notification">
+        <mat-card class="card">
+          <mat-card-header>
+            <mat-card-title>{{ slotDetails?.name }}</mat-card-title>
+            <mat-card-subtitle>{{ slotDetails?.address }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="card-container">
+              <div class="section-one">
+                <p>
+                  <span>Available Capacity:</span>
+                  {{ slotDetails?.availableCapacity }}
+                </p>
+                <p>
+                  <span>Dose 1:</span> {{ slotDetails?.availableCapacityDose1 }}
+                </p>
+                <p>
+                  <span>Dose 2:</span> {{ slotDetails?.availableCapacityDose2 }}
+                </p>
+              </div>
+              <div class="section-two">
+                <p><span>Vaccine: </span> {{ slotDetails?.vaccine }}</p>
+                <p>
+                  <span>Age Groupe: </span>
+                  {{ getAgeText(slotDetails?.minAgeLimit) }}
+                </p>
+                <p><span>Fee: </span> ₹ {{ slotDetails?.fee }} / {{ slotDetails?.feeType }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions *ngIf="slotDetails?.availableCapacity">
+            <button mat-flat-button color="primary" class="medium">Book</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
