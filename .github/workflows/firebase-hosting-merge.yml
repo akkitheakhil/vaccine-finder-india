@@ -27,7 +27,7 @@ jobs:
         run: npm install
       # Runs a set of commands to build
       - name: Build
-        run: ng build
+        run: npm run build
       # sotre the artifact
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
@@ -51,7 +51,7 @@ jobs:
         run: npm install
       # build the app
       - name: Build the app artifact for prod
-        run: ng build
+        run: npm run build
       # ddeploy the app artifact to firebase
       - name: Deploy angular app to Firebase
         uses: w9jds/firebase-action@master
