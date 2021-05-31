@@ -120,10 +120,7 @@ export class VaccineFinderFacadeService {
   }
 
   playAudio() {
-    clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {
-      this.play();
-    }, 1000);
+    this.play();
   }
 
   play() {

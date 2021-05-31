@@ -119,4 +119,8 @@ export class PincodeComponent implements OnInit {
       this.facadeService.updateSelectedPincode(this.selectedPincode)
     })
   }
+
+  book() {
+    window.open(this._vaccineFinderConst.cowinPortalUrl, "_blank");
+  }
 }

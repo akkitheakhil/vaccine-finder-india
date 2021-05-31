@@ -107,6 +107,8 @@ export class DistrictComponent implements OnInit {
     return this.selectedFilters.includes(filter)
   }
 
-
+  book() {
+    window.open(this._vaccineFinderConst.cowinPortalUrl, "_blank");
+  }
 
 }

@@ -120,6 +120,7 @@
         *ngFor="
           let slotDetails of availableSlotData?.slotsDetails
             | dataFilter: selectedFilters
+            | onlyAvailableSlots
             | notification
         "
       >
@@ -156,7 +157,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions *ngIf="slotDetails?.availableCapacity">
-            <button mat-flat-button color="primary" class="medium">Book</button>
+            <button mat-flat-button color="primary" class="medium" (click)="book()">Book</button>
           </mat-card-actions>
         </mat-card>
       </div>

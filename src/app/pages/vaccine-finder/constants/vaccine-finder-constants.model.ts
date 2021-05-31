@@ -61,4 +61,6 @@ export class VaccineFinderConstant {
     feeTypeFree: item => item.feeType === "Free",
     feeTypeAny: item => item.feeType === "Free" || item.feeType === "Paid",
   }
+
+  public cowinPortalUrl: string = "https://selfregistration.cowin.gov.in/";
 }
