@@ -22,6 +22,7 @@ import { NotificationPipe } from './pipes/notification.pipe';
 import {MatInputModule} from '@angular/material/input';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { OnlyAvailableSlotsPipe } from './pipes/only-available-slots.pipe';
+import { FilteredSlotCountPipe } from './pipes/filtered-slot-count.pipe';
 // All imports for material
 const materialImports = [
   MatButtonModule,
@@ -39,7 +40,8 @@ const materialImports = [
     DistrictComponent,
     NotificationPipe,
     CustomDatePipe,
-    OnlyAvailableSlotsPipe
+    OnlyAvailableSlotsPipe,
+    FilteredSlotCountPipe
   ],
   providers: [VaccineFinderHttpService, VaccineFinderFacadeService],
   imports: [

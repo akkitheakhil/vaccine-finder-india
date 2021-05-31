@@ -7,7 +7,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Selected State</mat-label>
         <mat-select
-        [compareWith]="selectedStateToDisplay"
+          [compareWith]="selectedStateToDisplay"
           [(ngModel)]="selectedState"
           name="states"
           (selectionChange)="newSelectedState($event?.value)"
@@ -114,10 +114,17 @@
           </ng-container>
         </mat-chip-list>
       </div>
+
       <span class="total"
-        >Total Available Vaccine:
-        {{ availableSlotData?.totalSlotsAvailable }}</span
-      >
+        >Available Vaccine:
+        {{
+          availableSlotData?.slotsDetails
+            | dataFilter: selectedFilters
+            | onlyAvailableSlots
+            | filteredSlotCount
+        }}
+      </span>
+
       <div
         *ngFor="
           let slotDetails of availableSlotData?.slotsDetails
@@ -159,7 +166,14 @@
             </div>
           </mat-card-content>
           <mat-card-actions *ngIf="slotDetails?.availableCapacity">
-            <button mat-flat-button color="primary" class="medium" (click)="book()">Book</button>
+            <button
+              mat-flat-button
+              color="primary"
+              class="medium"
+              (click)="book()"
+            >
+              Book
+            </button>
           </mat-card-actions>
         </mat-card>
       </div>

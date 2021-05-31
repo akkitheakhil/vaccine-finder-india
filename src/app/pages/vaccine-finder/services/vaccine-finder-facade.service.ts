@@ -113,7 +113,7 @@ export class VaccineFinderFacadeService {
 
   calculateTotalSlots(slots: VaccineSlotsDetails[]) {
     if(isEmptyData(slots)) {
-      return;
+      return 0;
     }
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
     return slots?.map((item) => item?.availableCapacity).reduce(reducer);
