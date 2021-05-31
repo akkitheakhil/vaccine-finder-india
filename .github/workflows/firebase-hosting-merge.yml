@@ -54,12 +54,9 @@ jobs:
         run: npm run build
       # ddeploy the app artifact to firebase
       - name: Deploy angular app to Firebase
-        uses: w9jds/firebase-action@master
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          args: deploy --only hosting
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_VACCINEFINDER_INDIA }}'
-          channelId: live
           projectId: vaccinefinder-india
-        env:
-          FIREBASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
