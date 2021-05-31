@@ -1,3 +1,4 @@
+
 name: CI/CD
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -54,9 +55,8 @@ jobs:
         run: npm run build
       # ddeploy the app artifact to firebase
       - name: Deploy angular app to Firebase
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_VACCINEFINDER_INDIA }}'
           projectId: vaccinefinder-india
-
