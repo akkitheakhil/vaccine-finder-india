@@ -5,6 +5,11 @@
   align-items: center;
   flex-direction: column;
 
+  .title {
+    font-weight: 900;
+    font-size: 24px;
+  }
+
   .states,
   .districts {
     width: 35%;

@@ -74,11 +74,19 @@
         </ng-container>
       </mat-chip-list>
     </div>
+
     <span class="total"
-      >Total Available Vaccine:
-      {{ availableSlotData?.totalSlotsAvailable }}</span
-    >
-    <div *ngFor="let slotDetails of availableSlotData?.slotsDetails | dataFilter: selectedFilters | notification">
+    >Available Vaccine:
+    {{
+      availableSlotData?.slotsDetails
+        | dataFilter: selectedFilters
+        | onlyAvailableSlots
+        | filteredSlotCount
+    }}
+  </span>
+
+
+    <div *ngFor="let slotDetails of availableSlotData?.slotsDetails | dataFilter: selectedFilters | notification | onlyAvailableSlots">
       <mat-card class="card">
         <mat-card-header>
           <mat-card-title>{{ slotDetails?.name }}</mat-card-title>

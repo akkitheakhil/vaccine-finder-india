@@ -1,5 +1,5 @@
 <div class="container">
-  <h2>Find Vaccine By District</h2>
+  <h1 class="title">Find Vaccine By District</h1>
 
   <div class="states" *ngIf="listOfStates$ | async as listOfStates">
     <p>Choose your State</p>
@@ -131,8 +131,7 @@
             | dataFilter: selectedFilters
             | onlyAvailableSlots
             | notification
-        "
-      >
+        ">
         <mat-card class="card">
           <mat-card-header>
             <mat-card-title>{{ slotDetails?.name }}</mat-card-title>

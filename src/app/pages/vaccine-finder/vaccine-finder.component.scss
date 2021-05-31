@@ -6,6 +6,11 @@
   flex-wrap: wrap;
   height: 100%;
 
+
+  .title {
+    font-weight: 900;
+    font-size: 24px;
+  }
   .action-buttons {
     display: flex;
     justify-content: space-around;
