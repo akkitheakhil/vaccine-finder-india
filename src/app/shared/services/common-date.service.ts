@@ -31,17 +31,18 @@ export class CommonDateService {
 
 
   /**
-   * @description - Get Array of Dates for next 7 Days
+   * @description - Get Array of Dates from calender based on the days needed
    * @param format - Format to which date should be formatted to
    * @param initalDay - Sets Initial day from which to add
+   * @param daysNeeded - No of days required.
    */
-  getNextSevenDays(format: string = "DD-MM-YYYY", initalDay: number = 1) {
-    const sevenDaysDates: string[] = [];
+  getCalenderDates(format: string = "DD-MM-YYYY", initalDay: number = 1, daysNeeded: number = 7) {
+    const calenderDates: string[] = [];
     let date;
-    Array.from(Array(7)).forEach((x, i) => {
+    Array.from(Array(daysNeeded)).forEach((x, i) => {
       date = moment().add(i+initalDay, 'days');
-      sevenDaysDates.push(moment(date).format(format));
+      calenderDates.push(moment(date).format(format));
     });
-    return sevenDaysDates;
+    return calenderDates;
   }
 }

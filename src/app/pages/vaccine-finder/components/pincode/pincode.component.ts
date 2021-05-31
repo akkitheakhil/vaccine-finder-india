@@ -47,7 +47,7 @@ export class PincodeComponent implements OnInit {
 
   ngOnInit(): void {
     this.facadeService.loadListOfStatesData();
-    this.calender = [...this.facadeService.getNextSevenDays("DD-MM-YYYY", this.initalDay)];
+    this.calender = [...this.facadeService.getNextCalenderDates("DD-MM-YYYY", this.initalDay, 4)];
     this. listenToPincodeChanges();
   }
 
@@ -72,13 +72,13 @@ export class PincodeComponent implements OnInit {
   }
 
   nextCalenderDays() {
-    this.initalDay += 7;
-    this.calender = [...this.facadeService.getNextSevenDays("DD-MM-YYYY", this.initalDay)];
+    this.initalDay += 4;
+    this.calender = [...this.facadeService.getNextCalenderDates("DD-MM-YYYY", this.initalDay, 4)];
   }
 
   prevCalenderDays() {
-    this.initalDay -= 7;
-    this.calender = [...this.facadeService.getNextSevenDays("DD-MM-YYYY", this.initalDay)];
+    this.initalDay -= 4;
+    this.calender = [...this.facadeService.getNextCalenderDates("DD-MM-YYYY", this.initalDay, 4)];
   }
 
   newPincode() {

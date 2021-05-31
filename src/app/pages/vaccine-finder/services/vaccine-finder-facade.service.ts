@@ -85,8 +85,8 @@ export class VaccineFinderFacadeService {
     return this.dateService.getDefaultDate();
   }
 
-  getNextSevenDays(format: string, initalDay: number) {
-    return this.dateService.getNextSevenDays(format, initalDay);
+  getNextCalenderDates(format: string, initalDay: number,  daysNeeded: number = 7) {
+    return this.dateService.getCalenderDates(format, initalDay, daysNeeded);
   }
 
   fetchAvailableSlots() {
