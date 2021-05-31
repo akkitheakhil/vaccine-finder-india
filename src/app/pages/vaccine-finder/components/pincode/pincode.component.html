@@ -6,46 +6,57 @@
     <input type="number" matInput placeholder="Pincode" (keyup)="newPincode()" [(ngModel)]="selectedPincode">
   </mat-form-field>
 
-  <div class="calender" *ngIf="!(selectedPincode | isEmpty) && isValidPincode">
-    <button
-    *ngIf="initalDay > 1"
-    mat-flat-button
-    class="dates"
-    (click)="prevCalenderDays()"
-  >
-   PREV
-  </button>
-    <button
-      mat-flat-button
-      class="dates"
-      [ngClass]="{ highlight: date === selectedDate }"
-      *ngFor="let date of calender"
-      (click)="newSelectedDate(date)"
-    >
-      {{ date | slice: 0:5 }}
-    </button>
+  <div class="calender" *ngIf="!(selectedPincode | isEmpty) && isValidPincode">>
+    <div class="calender-actions">
+      <span
+        class="material-icons"
+        *ngIf="initalDay > 1"
+        (click)="prevCalenderDays()"
+      >
+        chevron_left
+      </span>
+      <span class="material-icons" *ngIf="!(initalDay > 1)"> </span>
+      <span> DATE </span>
+      <span
+        class="material-icons"
+        *ngIf="initalDay < 22"
+        (click)="nextCalenderDays()"
+      >
+        chevron_right
+      </span>
+      <span class="material-icons" *ngIf="!(initalDay < 22)"> </span>
+    </div>
 
-    <button
-    *ngIf="initalDay < 22"
-      mat-flat-button
-      class="dates"
-      (click)="nextCalenderDays()"
-    >
-     NEXT
-    </button>
-
+    <div class="calender-container">
+      <div
+        class="calender-dates"
+        *ngFor="let date of calender"
+        [ngClass]="{ highlight: date === selectedDate }"
+        (click)="newSelectedDate(date)"
+      >
+        <span class="month">
+          {{ date | customDate: "month" }}
+        </span>
+        <span class="date">
+          {{ date | customDate: "date" }}
+        </span>
+        <span class="day">
+          {{ date | customDate: "day" }}
+        </span>
+      </div>
+    </div>
   </div>
 
   <div class="action-bar" *ngIf="!(selectedPincode | isEmpty) && isValidPincode">
     <button
       mat-stroked-button
-      class="large"
+      class="large white"
       color="primary"
-      (click)="getSlots()"
-    >
+      (click)="getSlots()">
       Search
     </button>
   </div>
+
 
   <div
   class="available-slots"
