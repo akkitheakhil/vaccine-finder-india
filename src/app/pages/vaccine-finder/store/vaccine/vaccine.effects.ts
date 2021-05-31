@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { VaccineFinderHttpService } from '../../services/vaccine-finder-http.service';
 import * as VaccineActions from './vaccine.actions';
-import { map, mergeMap, catchError, switchMap, distinctUntilChanged, withLatestFrom, filter } from 'rxjs/operators';
+import { map, mergeMap, catchError, switchMap, distinctUntilChanged, withLatestFrom, filter, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as camelCaseRecursive from 'camelcase-keys-recursive';
 import { VaccineStoreState } from '../../models/store-state.model';
@@ -68,7 +68,7 @@ export class VaccineEffects {
    */
   loadDistrictOnStateSelections$ = createEffect((): any => this.store.pipe(
     select(SelectedState),
-    filter((state) => !isEmptyData(state.stateName)),
+    filter((state) => !isEmptyData(state?.stateName)),
     mergeMap(() => [
       VaccineActions.loadListOfDistricts(),
       VaccineActions.LoadDefaultDate()
@@ -101,7 +101,7 @@ export class VaccineEffects {
     select(SelectedDate),
     withLatestFrom(this._selectedDistrict$),
     filter((data: [string, Districts]) => {
-     return !isEmptyData(data[1]?.districtName) && !isEmptyData(data[0]);
+      return !isEmptyData(data[1]?.districtName) && !isEmptyData(data[0]);
     }),
     mergeMap(() => [
       VaccineActions.loadVaccineSlots(),
@@ -119,7 +119,7 @@ export class VaccineEffects {
     select(SelectedDate),
     withLatestFrom(this._selectedPincode$),
     filter((data: [string, number]) => {
-     return (!isEmptyData(data[1]) && data[1] > 0 && data[1].toString().length === 6)&& !isEmptyData(data[0]);
+      return (!isEmptyData(data[1]) && data[1] > 0 && data[1].toString().length === 6) && !isEmptyData(data[0]);
     }),
     mergeMap(() => [
       VaccineActions.loadVaccineSlotsByPincode(),
@@ -189,8 +189,47 @@ export class VaccineEffects {
   ));
   //#endregion
 
+  //#region Hydration set Effects
+
+  hydrate$ = createEffect((): any => this.actions$.pipe(
+    ofType(VaccineActions.hydrate),
+    map(() => {
+      const storageValue = localStorage.getItem("state");
+      if (storageValue) {
+        try {
+          const state = JSON.parse(storageValue);
+          return VaccineActions.hydrateSuccess({ data: state });
+        } catch {
+          localStorage.removeItem("state");
+        }
+      }
+      return VaccineActions.hydrateFailure({ error: "error" });
+    })
+  )
+  );
+
+  //#endregion
+
+  //#region Hydration save effects
+
+  // hydration.effects.ts
+  serialize$ = createEffect((): any => this.actions$.pipe(
+    ofType(VaccineActions.hydrateSuccess, VaccineActions.hydrateFailure),
+    switchMap(() => this.store),
+    distinctUntilChanged(),
+    tap((state) => localStorage.setItem("state", JSON.stringify(state)))
+  ),
+    { dispatch: false }
+  );
+  //#endregion
+
   constructor(
     private actions$: Actions, private store: Store<VaccineStoreState>,
     private httpService: VaccineFinderHttpService,
     private commonDateService: CommonDateService) { }
+
+
+  ngrxOnInitEffects(): Action {
+    return VaccineActions.hydrate();
+  }
 }

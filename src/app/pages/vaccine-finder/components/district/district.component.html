@@ -7,9 +7,10 @@
       <mat-form-field appearance="fill">
         <mat-label>Selected State</mat-label>
         <mat-select
+        [compareWith]="selectedStateToDisplay"
           [(ngModel)]="selectedState"
           name="states"
-          (selectionChange)="newSelectedState()"
+          (selectionChange)="newSelectedState($event?.value)"
         >
           <mat-option *ngFor="let states of listOfStates" [value]="states">
             {{ states?.stateName }}
@@ -27,6 +28,7 @@
         <mat-select
           [(ngModel)]="selectedDistrict"
           name="district"
+          [compareWith]="selectedDistrictToDisplay"
           (selectionChange)="newSelectedDistrict()"
         >
           <mat-option

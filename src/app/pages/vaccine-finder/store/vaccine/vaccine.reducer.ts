@@ -40,5 +40,28 @@ export const reducer = createReducer(
 
   // Selected Pincode
   on(VaccineActions.selectedPincode, (state, { data }) => ({ ...state, selectedPincode: data })),
+
+  // Load List of States reducer
+  on(VaccineActions.hydrateSuccess, (state, { data }) =>
+  {
+    console.log(data);
+    return {
+      ...state,
+      districtsList: data?.vaccine?.districtsList,
+      statesList: data?.vaccine?.statesList,
+      selectedState: data?.vaccine?.selectedState,
+      selectedDistrict: data?.vaccine?.selectedDistrict,
+      selectedDate: data?.vaccine?.selectedDate,
+      slotsAvailable: data?.vaccine?.slotsAvailable,
+      selectedPincode: data?.vaccine?.selectedPincode
+    }
+  }
+
+  ),
+
+  on(VaccineActions.loadVaccineSlotsFailure, (state, { error }) => ({ ...state, slotsAvailable: error })),
 );
 
+function storeDateToLocalStorage(key: string, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}

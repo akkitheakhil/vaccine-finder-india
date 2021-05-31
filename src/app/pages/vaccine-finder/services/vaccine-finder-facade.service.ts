@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { combineLatest, forkJoin, Observable } from 'rxjs';
+import { debounce, debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { CommonDateService } from 'src/app/shared/services/common-date.service';
 import { isEmptyData } from 'src/app/shared/utils/common.util';
 import { AvailableSlotData } from '../models/available-slot-data';
@@ -10,7 +10,7 @@ import { States } from '../models/states.model';
 import { VaccineStoreState } from '../models/store-state.model';
 import { VaccineSlotsDetails } from '../models/vaccine-slots';
 import * as VaccineActions from '../store/vaccine/vaccine.actions';
-import { selectDistrictsList, selectStatesList, SelecteAvailableVaccineSlots, SelectedDate } from '../store/vaccine/vaccine.selectors';
+import { selectDistrictsList, selectStatesList, SelecteAvailableVaccineSlots, SelectedDate, SelectedDistrict, SelectedPincode, SelectedState } from '../store/vaccine/vaccine.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -101,7 +101,7 @@ export class VaccineFinderFacadeService {
 
   getAvailableSlots(): Observable<AvailableSlotData> {
     return this.store.select(SelecteAvailableVaccineSlots).pipe(map((slots) => {
-      const total = this.calculateTotalSlots(slots.sessions);
+      const total = this.calculateTotalSlots(slots?.sessions);
       const availableSlotsData: AvailableSlotData = {
         totalSlotsAvailable: total || 0,
         slotsDetails: slots?.sessions.map((item) => item).sort((a,b) => (a.availableCapacity > b.availableCapacity) ? -1 : ((b.availableCapacity > a.availableCapacity) ? 1 : 0))
@@ -116,7 +116,7 @@ export class VaccineFinderFacadeService {
       return;
     }
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    return slots.map((item) => item.availableCapacity).reduce(reducer);
+    return slots?.map((item) => item?.availableCapacity).reduce(reducer);
   }
 
   playAudio() {
@@ -128,6 +128,30 @@ export class VaccineFinderFacadeService {
     audio.src = '/assets/audio/alert-notification.wav';
     audio.load();
     audio.play();
+  }
+
+  getSelectedState() {
+    return this.store.select(SelectedState)
+  }
+
+  getSelectedDistrict() {
+    return this.store.select(SelectedDistrict)
+  }
+
+  getSelectedPincode() {
+    return this.store.select(SelectedPincode)
+  }
+
+  getSelectedDate() {
+    return this.store.select(SelectedDate)
+  }
+
+  getFindByDistrictInit() {
+   return combineLatest([this.getSelectedState(), this.getSelectedDistrict(), this.getSelectedDate()]);
+  }
+
+  getFindByPincode() {
+   return combineLatest([this.getSelectedPincode(), this.getSelectedDate()]);
   }
 
 

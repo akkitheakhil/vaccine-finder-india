@@ -141,3 +141,18 @@ export const selectedPincode = createAction(
 );
 //#endregion
 
+
+//#region
+
+export const hydrate = createAction('[Vaccine] Vaccine Hydrate');
+
+export const hydrateSuccess = createAction(
+  '[Vaccine] Vaccine Hydrate Success',
+  props<{ data: any }>()
+);
+
+export const hydrateFailure = createAction('[Vaccine] Vaccine Hydrate Failure',
+  props<{ error: any }>()
+);
+
+//#endregion
