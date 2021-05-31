@@ -17,6 +17,8 @@ import { selectDistrictsList, selectStatesList, SelecteAvailableVaccineSlots, Se
 })
 export class VaccineFinderFacadeService {
 
+  timeout;
+
   constructor(private store: Store<VaccineStoreState>, private dateService: CommonDateService) { }
 
   /**
@@ -118,9 +120,18 @@ export class VaccineFinderFacadeService {
   }
 
   playAudio() {
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(() => {
+      this.play();
+    }, 1000);
+  }
+
+  play() {
     const audio = new Audio();
     audio.src = '/assets/audio/alert-notification.wav';
     audio.load();
     audio.play();
   }
+
+
 }

@@ -59,7 +59,7 @@ export class DistrictComponent implements OnInit {
 
   newSelectedDate(date: string): void {
     this.selectedDate = date;
-    this.countdown.restart();
+    this.countdown?.restart();
     this.facadeService.updateSelectedDate(this.selectedDate);
   }
 
