@@ -1,7 +1,6 @@
 .container {
   padding: 20px;
   display: flex;
-
   align-items: center;
   flex-direction: column;
 
@@ -17,163 +16,26 @@
       width: 100%;
     }
   }
-}
-
-.calender-text {
-  text-align: center;
-  margin: 10px 0;
-  font-size: 18px !important;
-  font-weight: bold !important;
-}
-
-.calender {
-  display: flex;
-  padding: 10px;
-  flex-direction: column;
-
-  .calender-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .material-icons {
-      cursor: pointer;
-      font-size: 3rem;
-      width: 48px;
-      color:#3f51b5;
-    }
-  }
-
-  .calender-container{
-    display: flex;
-    padding: 10px;
-    flex-wrap: wrap;
-    .calender-dates {
-
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background-color: #fff;
-      box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-        0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
-        0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-        0 100px 80px rgba(0, 0, 0, 0.12);
-
-      border-radius: 15px;
-      margin: 10px;
-      width: 40px;
-
-      cursor: pointer;
-
-      transition: background-color 200ms ease-in-out;
-
-      &.highlight {
-        background-color: #3f51b5;
-        color: #fff;
-
-        &:hover {
-          background-color: #6071d3;
-          color: black !important;
-        }
-      }
-
-      .date {
-        font-size: 1.6rem;
-        margin: 10px;
-        font-weight: bold;
-      }
-
-      &:hover {
-        background-color: #f3f5fd;
-      }
-    }
-  }
-
-
-
-  .dates {
-    box-sizing: border-box;
-    font-weight: 900;
-    height: 100px;
-    width: 100px;
-    margin: 10px;
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-
-    &.highlight {
-      border: 5px #3f51b5 solid !important;
-    }
-  }
-}
-
-.available-slots {
-  margin: 20px;
-  padding: 15px;
 
   .refresh-countdown {
     font-weight: bold;
     font-size: 14px;
     margin: 10px;
   }
+}
 
-  .filters {
-    margin: 15px;
+::ng-deep {
+  .mat-form-field-flex {
+    background-color: #fff !important;
+    border-radius: 20px !important;
     padding: 10px;
-    mat-chip {
-      background-color: #fff;
-      box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-      0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
-      0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-      0 100px 80px rgba(0, 0, 0, 0.12);
-      cursor: pointer;
-      &.active {
-        background-color: #3f51b5;
-        color: #fff;
-      }
-    }
+    box-shadow: 0 2.8px 2.2px rgb(0 0 0 / 3%), 0 6.7px 5.3px rgb(0 0 0 / 5%),
+      0 12.5px 10px rgb(0 0 0 / 2%), 0 22.3px 17.9px rgb(0 0 0 / 1%),
+      0 41.8px 33.4px rgb(0 0 0 / 1%), 0 100px 80px rgb(0 0 0 / 12%);
   }
 
-  .total {
-    font-size: 6fr;
-    font-weight: 900;
-    margin: 20px;
-  }
-
-  .card {
-    margin: 10px;
-
-    .card-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .section-one {
-        display: flex;
-        align-items: flex-start;
-        flex-direction: column;
-
-        p {
-          span {
-            font-weight: bold;
-          }
-        }
-      }
-      .section-two {
-        display: flex;
-        align-items: flex-start;
-        flex-direction: column;
-        p {
-          span {
-            font-weight: bold;
-          }
-        }
-      }
-    }
+  .mat-form-field-underline {
+    display: none !important;
   }
 }
 
@@ -181,19 +43,5 @@
   .states,
   .districts {
     width: 100% !important;
-  }
-
-  .available-slots {
-    margin: 5px;
-    padding: 5px;
-  }
-
-  .calender {
-    .dates {
-      height: 60px !important;
-      width: 60px !important;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
   }
 }

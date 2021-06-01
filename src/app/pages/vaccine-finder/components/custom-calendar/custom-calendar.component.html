@@ -1,0 +1,40 @@
+<div class="calendar">
+  <div class="calendar-actions">
+    <span
+      class="material-icons"
+      *ngIf="initalDay > 1"
+      (click)="prevcalendarDays()"
+    >
+      chevron_left
+    </span>
+    <span class="material-icons" *ngIf="!(initalDay > 1)"> </span>
+    <span class="date-title"> DATE </span>
+    <span
+      class="material-icons"
+      *ngIf="initalDay < 22"
+      (click)="nextcalendarDays()"
+    >
+      chevron_right
+    </span>
+    <span class="material-icons" *ngIf="!(initalDay < 22)"> </span>
+  </div>
+
+  <div class="calendar-container">
+    <div
+      class="calendar-dates"
+      *ngFor="let date of calendar"
+      [ngClass]="{ highlight: date === selectedDate }"
+      (click)="newSelectedDate(date)"
+    >
+      <span class="month">
+        {{ date | customDate: "month" }}
+      </span>
+      <span class="date">
+        {{ date | customDate: "date" }}
+      </span>
+      <span class="day">
+        {{ date | customDate: "day" }}
+      </span>
+    </div>
+  </div>
+</div>

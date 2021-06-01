@@ -42,45 +42,12 @@
     </ng-container>
   </div>
 
-  <div class="calender" *ngIf="!(selectedDistrict?.districtName | isEmpty)">
-    <div class="calender-actions">
-      <span
-        class="material-icons"
-        *ngIf="initalDay > 1"
-        (click)="prevCalenderDays()"
-      >
-        chevron_left
-      </span>
-      <span class="material-icons" *ngIf="!(initalDay > 1)"> </span>
-      <span> DATE </span>
-      <span
-        class="material-icons"
-        *ngIf="initalDay < 22"
-        (click)="nextCalenderDays()"
-      >
-        chevron_right
-      </span>
-      <span class="material-icons" *ngIf="!(initalDay < 22)"> </span>
-    </div>
-
-    <div class="calender-container">
-      <div
-        class="calender-dates"
-        *ngFor="let date of calender"
-        [ngClass]="{ highlight: date === selectedDate }"
-        (click)="newSelectedDate(date)"
-      >
-        <span class="month">
-          {{ date | customDate: "month" }}
-        </span>
-        <span class="date">
-          {{ date | customDate: "date" }}
-        </span>
-        <span class="day">
-          {{ date | customDate: "day" }}
-        </span>
-      </div>
-    </div>
+  <div *ngIf="!(selectedDistrict?.districtName | isEmpty)">
+    <covac-custom-calendar
+      [selectedDate]="selectedDate"
+      (dateChange)="countdown?.restart()"
+    >
+    </covac-custom-calendar>
   </div>
 
   <div class="action-bar" *ngIf="!(selectedDistrict?.districtName | isEmpty)">
@@ -94,88 +61,17 @@
     </button>
   </div>
 
+  <div class="refresh-countdown" *ngIf="hasSeached">
+    Data refreshing in
+    <countdown #cd [config]="countDownConfig"></countdown> seconds.
+  </div>
+
   <div
     class="available-slots"
     *ngIf="listofAvailableSlots$ | async as availableSlotData"
   >
-    <div *ngIf="!(availableSlotData | isEmpty) && hasSeached">
-      <div class="refresh-countdown">
-        Data refreshing in
-        <countdown #cd [config]="countDownConfig"></countdown> seconds.
-      </div>
-      <div class="filters">
-        <mat-chip-list aria-label="Filters selection">
-          <ng-container *ngFor="let item of filters">
-            <mat-chip
-              (click)="filterAction(item?.name)"
-              [ngClass]="{ active: isFilterApplied(item?.name) }"
-              >{{ item?.label }}</mat-chip
-            >
-          </ng-container>
-        </mat-chip-list>
-      </div>
-
-      <span class="total"
-        >Available Vaccine:
-        {{
-          availableSlotData?.slotsDetails
-            | dataFilter: selectedFilters
-            | onlyAvailableSlots
-            | filteredSlotCount
-        }}
-      </span>
-
-      <div
-        *ngFor="
-          let slotDetails of availableSlotData?.slotsDetails
-            | dataFilter: selectedFilters
-            | onlyAvailableSlots
-            | notification
-        ">
-        <mat-card class="card">
-          <mat-card-header>
-            <mat-card-title>{{ slotDetails?.name }}</mat-card-title>
-            <mat-card-subtitle>{{ slotDetails?.address }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="card-container">
-              <div class="section-one">
-                <p>
-                  <span>Available Capacity:</span>
-                  {{ slotDetails?.availableCapacity }}
-                </p>
-                <p>
-                  <span>Dose 1:</span> {{ slotDetails?.availableCapacityDose1 }}
-                </p>
-                <p>
-                  <span>Dose 2:</span> {{ slotDetails?.availableCapacityDose2 }}
-                </p>
-              </div>
-              <div class="section-two">
-                <p><span>Vaccine: </span> {{ slotDetails?.vaccine }}</p>
-                <p>
-                  <span>Age Groupe: </span>
-                  {{ getAgeText(slotDetails?.minAgeLimit) }}
-                </p>
-                <p>
-                  <span>Fee: </span> ₹ {{ slotDetails?.fee }} /
-                  {{ slotDetails?.feeType }}
-                </p>
-              </div>
-            </div>
-          </mat-card-content>
-          <mat-card-actions *ngIf="slotDetails?.availableCapacity">
-            <button
-              mat-flat-button
-              color="primary"
-              class="medium"
-              (click)="book()"
-            >
-              Book
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </div>
+    <covac-available-slot-view
+      [availableSlotData]="availableSlotData" *ngIf="hasSeached"
+    ></covac-available-slot-view>
   </div>
 </div>

@@ -156,3 +156,13 @@ export const hydrateFailure = createAction('[Vaccine] Vaccine Hydrate Failure',
 );
 
 //#endregion
+
+
+//#region
+
+export const muteNotifications = createAction(
+  '[Vaccine] Mute Notifications',
+  props<{ data: any }>()
+);
+
+//#endregion

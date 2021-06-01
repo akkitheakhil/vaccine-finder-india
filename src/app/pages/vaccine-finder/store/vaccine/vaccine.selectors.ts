@@ -38,3 +38,9 @@ export const SelecteAvailableVaccineSlots = createSelector(selectVaccineFeature,
  * @description Select Selected Pincode
  */
  export const SelectedPincode = createSelector(selectVaccineFeature, (state: VaccineStoreState) => state?.selectedPincode);
+
+
+/**
+ * @description Select Notification Settings
+ */
+ export const SelectNotificationSettings = createSelector(selectVaccineFeature, (state: VaccineStoreState) => state?.isNotificationMute);

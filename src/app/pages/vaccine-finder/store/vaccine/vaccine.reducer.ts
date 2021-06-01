@@ -12,6 +12,7 @@ export const initialState: VaccineStoreState = {
   selectedDate: "",
   slotsAvailable: { sessions: [] },
   selectedPincode: 0,
+  isNotificationMute: { isMute: false }
 };
 
 export const reducer = createReducer(
@@ -44,7 +45,6 @@ export const reducer = createReducer(
   // Load List of States reducer
   on(VaccineActions.hydrateSuccess, (state, { data }) =>
   {
-    console.log(data);
     return {
       ...state,
       districtsList: data?.vaccine?.districtsList,
@@ -53,13 +53,15 @@ export const reducer = createReducer(
       selectedDistrict: data?.vaccine?.selectedDistrict,
       selectedDate: data?.vaccine?.selectedDate,
       slotsAvailable: data?.vaccine?.slotsAvailable,
-      selectedPincode: data?.vaccine?.selectedPincode
+      selectedPincode: data?.vaccine?.selectedPincode,
+      isNotificationMute: data?.vaccine?.isNotificationMute || { isMute: false}
     }
   }
-
   ),
-
   on(VaccineActions.loadVaccineSlotsFailure, (state, { error }) => ({ ...state, slotsAvailable: error })),
+
+  on(VaccineActions.muteNotifications, (state, { data }) => ({ ...state, isNotificationMute: data })),
+
 );
 
 function storeDateToLocalStorage(key: string, data) {

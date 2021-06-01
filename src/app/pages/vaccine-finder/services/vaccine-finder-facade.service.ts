@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, forkJoin, Observable } from 'rxjs';
-import { debounce, debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { combineLatest, forkJoin, Observable, of } from 'rxjs';
+import { debounce, debounceTime, distinctUntilChanged, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { CommonDateService } from 'src/app/shared/services/common-date.service';
 import { isEmptyData } from 'src/app/shared/utils/common.util';
 import { AvailableSlotData } from '../models/available-slot-data';
@@ -10,7 +10,7 @@ import { States } from '../models/states.model';
 import { VaccineStoreState } from '../models/store-state.model';
 import { VaccineSlotsDetails } from '../models/vaccine-slots';
 import * as VaccineActions from '../store/vaccine/vaccine.actions';
-import { selectDistrictsList, selectStatesList, SelecteAvailableVaccineSlots, SelectedDate, SelectedDistrict, SelectedPincode, SelectedState } from '../store/vaccine/vaccine.selectors';
+import { selectDistrictsList, selectStatesList, SelecteAvailableVaccineSlots, SelectedDate, SelectedDistrict, SelectedPincode, SelectedState, SelectNotificationSettings } from '../store/vaccine/vaccine.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ import { selectDistrictsList, selectStatesList, SelecteAvailableVaccineSlots, Se
 export class VaccineFinderFacadeService {
 
   timeout;
-
+  hasNotificationMute: boolean = false;
   constructor(private store: Store<VaccineStoreState>, private dateService: CommonDateService) { }
 
   /**
@@ -85,7 +85,7 @@ export class VaccineFinderFacadeService {
     return this.dateService.getDefaultDate();
   }
 
-  getNextCalenderDates(format: string, initalDay: number,  daysNeeded: number = 7) {
+  getNextCalendarDates(format: string, initalDay: number,  daysNeeded: number = 7) {
     return this.dateService.getCalenderDates(format, initalDay, daysNeeded);
   }
 
@@ -98,7 +98,6 @@ export class VaccineFinderFacadeService {
   }
 
 
-
   getAvailableSlots(): Observable<AvailableSlotData> {
     return this.store.select(SelecteAvailableVaccineSlots).pipe(map((slots) => {
       const total = this.calculateTotalSlots(slots?.sessions);
@@ -106,7 +105,6 @@ export class VaccineFinderFacadeService {
         totalSlotsAvailable: total || 0,
         slotsDetails: slots?.sessions.map((item) => item).sort((a,b) => (a.availableCapacity > b.availableCapacity) ? -1 : ((b.availableCapacity > a.availableCapacity) ? 1 : 0))
       }
-      console.log(availableSlotsData)
       return availableSlotsData;
     }));
   }
@@ -117,10 +115,6 @@ export class VaccineFinderFacadeService {
     }
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
     return slots?.map((item) => item?.availableCapacity).reduce(reducer);
-  }
-
-  playAudio() {
-    this.play();
   }
 
   play() {
@@ -154,5 +148,11 @@ export class VaccineFinderFacadeService {
    return combineLatest([this.getSelectedPincode(), this.getSelectedDate()]);
   }
 
+  getNotificationSettings() {
+    return this.store.select(SelectNotificationSettings);
+  }
 
+  setNotificationSettings(canNotify) {
+    this.store.dispatch(VaccineActions.muteNotifications({data: canNotify}));
+  }
 }

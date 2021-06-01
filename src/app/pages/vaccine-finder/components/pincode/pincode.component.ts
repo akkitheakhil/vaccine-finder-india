@@ -17,16 +17,9 @@ export class PincodeComponent implements OnInit {
   listOfStates$ = this.facadeService.getListOfStatesData();
   listOfDistricts$ = this.facadeService.getListOfDistrictsData();
   listofAvailableSlots$ = this.facadeService.getAvailableSlots();
-
   selectedDate = this.facadeService.getDefaultDate();
-
   selectedPincode: number = 0;
-
   $pincodeSelected = new Subject();
-
-  filters: { name: any, label: string }[] = this._vaccineFinderConst.filters;
-  customFilters = this._vaccineFinderConst.CustomFilters;
-  selectedFilters: any[] = [];
 
   countDownConfig = {
     leftTime: 30,
@@ -34,31 +27,19 @@ export class PincodeComponent implements OnInit {
   }
 
   hasSeached: boolean = false;
-
-  calender: string[] = [];
-  initalDay = 1;
   interval;
 
   @ViewChild('cd', { static: false })
-  private countdown!: CountdownComponent;
+  public countdown!: CountdownComponent;
 
   constructor(private facadeService: VaccineFinderFacadeService) { }
 
-
   ngOnInit(): void {
-    this.facadeService.loadListOfStatesData();
-    this.calender = [...this.facadeService.getNextCalenderDates("DD-MM-YYYY", this.initalDay, 4)];
-    this. listenToPincodeChanges();
+    this.listenToPincodeChanges();
   }
 
   newSelectedPincode(): void {
     this.facadeService.updateSelectedPincode(this.selectedPincode);
-  }
-
-  newSelectedDate(date: string): void {
-    this.selectedDate = date;
-    this.countdown.restart();
-    this.facadeService.updateSelectedDate(this.selectedDate);
   }
 
   getSlots(): void {
@@ -71,43 +52,10 @@ export class PincodeComponent implements OnInit {
     }, 30 * 1000);
   }
 
-  nextCalenderDays() {
-    this.initalDay += 4;
-    this.calender = [...this.facadeService.getNextCalenderDates("DD-MM-YYYY", this.initalDay, 4)];
-  }
-
-  prevCalenderDays() {
-    this.initalDay -= 4;
-    this.calender = [...this.facadeService.getNextCalenderDates("DD-MM-YYYY", this.initalDay, 4)];
-  }
-
   newPincode() {
     if(this.isValidPincode) {
       this.$pincodeSelected.next(this.selectedPincode);
     }
-  }
-
-  getAgeText(age: number | undefined) {
-    return age === 18 ? "18-44" : "45+"
-  }
-
-  addFilter(filterName) {
-    const filter = this.customFilters[filterName];
-    this.selectedFilters.push(this.customFilters[filterName])
-  }
-
-  removeFilter(filterName) {
-    const filter = this.customFilters[filterName];
-    this.selectedFilters = this.selectedFilters.filter(item => item !== filter);
-  }
-
-  filterAction(filterName) {
-    this.isFilterApplied(filterName) ? this.removeFilter(filterName) : this.addFilter(filterName);
-  }
-
-  isFilterApplied(filterName) {
-    const filter = this.customFilters[filterName];
-    return this.selectedFilters.includes(filter)
   }
 
   get isValidPincode() {
@@ -118,9 +66,5 @@ export class PincodeComponent implements OnInit {
     this.$pincodeSelected.pipe(debounceTime(400),distinctUntilChanged()).subscribe((data) => {
       this.facadeService.updateSelectedPincode(this.selectedPincode)
     })
-  }
-
-  book() {
-    window.open(this._vaccineFinderConst.cowinPortalUrl, "_blank");
   }
 }

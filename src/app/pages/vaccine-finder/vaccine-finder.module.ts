@@ -18,11 +18,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import {MatCardModule} from '@angular/material/card';
 import { CountdownModule } from 'ngx-countdown';
 import {MatChipsModule} from '@angular/material/chips';
-import { NotificationPipe } from './pipes/notification.pipe';
 import {MatInputModule} from '@angular/material/input';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
-import { OnlyAvailableSlotsPipe } from './pipes/only-available-slots.pipe';
 import { FilteredSlotCountPipe } from './pipes/filtered-slot-count.pipe';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { CustomCalendarComponent } from './components/custom-calendar/custom-calendar.component';
+import { AvailableSlotViewComponent } from './components/available-slot-view/available-slot-view.component';
+
 // All imports for material
 const materialImports = [
   MatButtonModule,
@@ -31,6 +33,7 @@ const materialImports = [
   MatCardModule,
   MatChipsModule,
   MatInputModule,
+  MatTooltipModule,
 ]
 
 @NgModule({
@@ -38,10 +41,10 @@ const materialImports = [
     VaccineFinderComponent,
     PincodeComponent,
     DistrictComponent,
-    NotificationPipe,
     CustomDatePipe,
-    OnlyAvailableSlotsPipe,
-    FilteredSlotCountPipe
+    FilteredSlotCountPipe,
+    CustomCalendarComponent,
+    AvailableSlotViewComponent
   ],
   providers: [VaccineFinderHttpService, VaccineFinderFacadeService],
   imports: [

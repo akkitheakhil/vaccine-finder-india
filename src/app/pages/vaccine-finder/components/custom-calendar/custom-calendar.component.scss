@@ -1,0 +1,74 @@
+.calendar {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+
+  .calendar-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .date-title {
+      font-weight: bold;
+      color:#3f51b5;
+    }
+
+    .material-icons {
+      cursor: pointer;
+      font-size: 3rem;
+      width: 48px;
+      color:#3f51b5;
+    }
+  }
+
+  .calendar-container{
+    display: flex;
+    padding: 10px;
+    flex-wrap: wrap;
+    .calendar-dates {
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #fff;
+      box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+
+      border-radius: 15px;
+      margin: 10px;
+      width: 40px;
+
+      cursor: pointer;
+
+      transition: background-color 200ms ease-in-out;
+
+      &.highlight {
+        background-color: #3f51b5;
+        color: #fff;
+
+        &:hover{
+          background-color: #6071d3;
+          color: #fff !important;
+        }
+
+        &:focus, :focus-visible {
+          color: #fff !important;
+        }
+      }
+
+      .date {
+        font-size: 1.6rem;
+        margin: 10px;
+        font-weight: bold;
+      }
+
+      &:hover {
+        background-color: #f3f5fd;
+      }
+    }
+  }
+}

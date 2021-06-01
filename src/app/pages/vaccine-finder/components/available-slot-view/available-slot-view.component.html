@@ -1,0 +1,86 @@
+<div *ngIf="!(availableSlotData | isEmpty)" class="available-slots">
+  <div
+    class="mute-button-container"
+    *ngIf="isNotificationMute$ | async as canNotify"
+  >
+    <button mat-mini-fab [color]="canNotify?.isMute? 'primary' : 'accent' " matTooltip="Mute/Unmute Notifications">
+      <span class="material-icons" (click)="muteNotification(canNotify)">
+        {{ canNotify?.isMute ? "volume_up" : "volume_off" }}
+      </span>
+    </button>
+  </div>
+
+  <div class="filters">
+    <mat-chip-list aria-label="Filters selection">
+      <ng-container *ngFor="let fltr of Object.keys(allFiltersAvailable)">
+        <ng-container *ngFor="let item of allFiltersAvailable[fltr]">
+          <mat-chip
+            *ngIf="fltr?.toString() === 'minAgeLimit'"
+            [ngClass]="{'active': isFilterApplied(fltr, item)}"
+            (click)="addorRemoveCustomFilter(fltr, item)"
+            >AGE {{ item }}+</mat-chip
+          >
+          <mat-chip
+            *ngIf="fltr?.toString() !== 'minAgeLimit'"
+            [ngClass]="{'active': isFilterApplied(fltr, item)}"
+            (click)="addorRemoveCustomFilter(fltr, item)"
+            >{{ item | uppercase }}</mat-chip
+          >
+        </ng-container>
+      </ng-container>
+    </mat-chip-list>
+  </div>
+
+  <span class="total"
+    >Available Vaccines:
+    {{ filteredSlotsData | filteredSlotCount }}
+  </span>
+
+
+  <div *ngFor="let slotDetails of filteredSlotsData">
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title>{{ slotDetails?.name }}</mat-card-title>
+        <mat-card-subtitle>{{ slotDetails?.address }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="card-container">
+          <div class="section-one">
+            <p>
+              <span>Available Capacity:</span>
+              {{ slotDetails?.availableCapacity }}
+            </p>
+            <p>
+              <span>Dose 1:</span> {{ slotDetails?.availableCapacityDose1 }}
+            </p>
+            <p>
+              <span>Dose 2:</span> {{ slotDetails?.availableCapacityDose2 }}
+            </p>
+          </div>
+          <div class="section-two">
+            <p><span>Vaccine: </span> {{ slotDetails?.vaccine }}</p>
+            <p>
+              <span>Age Groupe: </span>
+              {{ getAgeText(slotDetails?.minAgeLimit) }}
+            </p>
+            <p>
+              <span>Fee: </span> ₹ {{ slotDetails?.fee }} /
+              {{ slotDetails?.feeType }}
+            </p>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions *ngIf="slotDetails?.availableCapacity">
+        <button mat-flat-button color="primary" class="medium" (click)="book()">
+          Book
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<ng-container *ngIf="filteredSlotsData.length === 0">
+  <mat-card class="no-data-available">
+    <h3>No vaccines available at the moment. We will try again in 30 seconds</h3>
+  </mat-card>
+</ng-container>
