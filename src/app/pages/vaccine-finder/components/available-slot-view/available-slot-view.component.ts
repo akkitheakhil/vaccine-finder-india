@@ -22,7 +22,7 @@ export class AvailableSlotViewComponent implements OnInit {
 
   allFiltersAvailable: CustomSlotFilter = this._vaccineFinderConst.CustomFilters;
   appliedFilters: CustomSlotFilter = new CustomSlotFilter();
-  shouldNotify:boolean = true;
+  shouldNotify: boolean = true;
   $showNotification = new Subject();
   constructor(private facadeService: VaccineFinderFacadeService) { }
 
@@ -50,7 +50,7 @@ export class AvailableSlotViewComponent implements OnInit {
 
 
   addorRemoveCustomFilter(key, value) {
-    if(this.isFilterApplied(key, value)) {
+    if (this.isFilterApplied(key, value)) {
       this.appliedFilters[key] = this.appliedFilters[key].filter(item => item !== value);
     } else {
       this.appliedFilters[key]?.push(value);
@@ -60,50 +60,56 @@ export class AvailableSlotViewComponent implements OnInit {
   get filterQuery() {
     let query = {};
     for (let keys in this.appliedFilters) {
-        if (this.appliedFilters[keys].constructor === Array && this.appliedFilters[keys].length > 0) {
-            query[keys] = this.appliedFilters[keys];
-        }
+      if (this.appliedFilters[keys].constructor === Array && this.appliedFilters[keys].length > 0) {
+        query[keys] = this.appliedFilters[keys];
+      }
     }
     return query;
-}
+  }
 
-get filterData() {
-  const query = this.filterQuery;
-  const filteredData = this.availableSlotData?.slotsDetails.filter( (item) => {
+  get filterData() {
+    const query = this.filterQuery;
+    const filteredData = this.availableSlotData?.slotsDetails.filter((item) => {
       for (let key in query) {
-          if (item[key] === undefined || !query[key].includes(item[key])) {
-              return false;
-          }
+        if (item[key] === undefined || !query[key].includes(item[key])) {
+          return false;
+        }
       }
       return true;
-  });
-  return filteredData;
-};
+    });
+    return filteredData;
+  };
 
-get filteredSlotsData() {
-  const dataToFilter = this.filterData.filter(item => item?.availableCapacity > 0);
-  const count = this.facadeService.calculateTotalSlots(dataToFilter);
-  if(count > 0){
-    this.$showNotification.next(count);
+  get filteredSlotsData() {
+    const dataToFilter = this.filterData.filter(item => item?.availableCapacity > 0);
+    const count = this.facadeService.calculateTotalSlots(dataToFilter);
+    if (count > 0) {
+      this.$showNotification.next(count);
+    }
+    return dataToFilter;
   }
-  return dataToFilter;
-}
 
-showNotification() {
-  this.$showNotification.pipe(distinctUntilChanged(), debounceTime(1000), switchMap((data) => {
-    this.notify();
-    return of();
-  })).subscribe();
-}
-
-notify() {
-  if(this.shouldNotify){
-    this.facadeService.play();
+  showNotification() {
+    this.$showNotification.pipe(distinctUntilChanged(), debounceTime(1000), switchMap((data) => {
+      this.notify();
+      return of();
+    })).subscribe();
   }
-  this.shouldNotify = false;
-  setTimeout(() => {
-    this.shouldNotify = true;
-  }, 29* 1000);
-}
+
+  clearAllFilters() {
+    for (let key in this.appliedFilters) {
+      this.appliedFilters[key] = [];
+    }
+  }
+
+  notify() {
+    if (this.shouldNotify) {
+      this.facadeService.play();
+    }
+    this.shouldNotify = false;
+    setTimeout(() => {
+      this.shouldNotify = true;
+    }, 29 * 1000);
+  }
 
 }
