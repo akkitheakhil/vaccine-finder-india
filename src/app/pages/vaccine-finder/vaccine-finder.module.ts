@@ -24,7 +24,7 @@ import { FilteredSlotCountPipe } from './pipes/filtered-slot-count.pipe';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { CustomCalendarComponent } from './components/custom-calendar/custom-calendar.component';
 import { AvailableSlotViewComponent } from './components/available-slot-view/available-slot-view.component';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 // All imports for material
 const materialImports = [
   MatButtonModule,
@@ -34,6 +34,7 @@ const materialImports = [
   MatChipsModule,
   MatInputModule,
   MatTooltipModule,
+  MatSnackBarModule,
 ]
 
 @NgModule({

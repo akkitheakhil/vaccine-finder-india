@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { debounce, debounceTime, distinctUntilChanged, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
@@ -19,7 +20,7 @@ export class VaccineFinderFacadeService {
 
   timeout;
   hasNotificationMute: boolean = false;
-  constructor(private store: Store<VaccineStoreState>, private dateService: CommonDateService) { }
+  constructor(private store: Store<VaccineStoreState>, private dateService: CommonDateService, private _snackBar: MatSnackBar) { }
 
   /**
    * @description Load State data on page load
@@ -166,5 +167,11 @@ export class VaccineFinderFacadeService {
 
   setNotificationSettings(canNotify) {
     this.store.dispatch(VaccineActions.muteNotifications({data: canNotify}));
+  }
+
+  showSnackBar(message: string, action: string = '', duration: number = 3000) {
+    this._snackBar.open(message, action, {
+      duration
+    });
   }
 }

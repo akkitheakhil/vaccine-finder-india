@@ -42,6 +42,8 @@ export class AvailableSlotViewComponent implements OnInit {
   muteNotification(canNotify) {
     const newCanNotify = { isMute: !canNotify.isMute };
     this.facadeService.setNotificationSettings(newCanNotify);
+    const message: string = newCanNotify.isMute ? 'Notification muted' : "Notification on";
+    this.showSnackBar(message);
   }
 
   isFilterApplied(key, value) {
@@ -110,6 +112,10 @@ export class AvailableSlotViewComponent implements OnInit {
     setTimeout(() => {
       this.shouldNotify = true;
     }, 29 * 1000);
+  }
+
+  showSnackBar(message: string) {
+    this.facadeService.showSnackBar(message);
   }
 
 }
