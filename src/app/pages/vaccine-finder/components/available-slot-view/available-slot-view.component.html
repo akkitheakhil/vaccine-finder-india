@@ -3,9 +3,9 @@
     class="mute-button-container"
     *ngIf="isNotificationMute$ | async as canNotify"
   >
-    <button mat-mini-fab [color]="canNotify?.isMute? 'primary' : 'accent' " matTooltip="Mute/Unmute Notifications">
+    <button mat-mini-fab [color]="canNotify?.isMute? 'accent' : 'primary' " matTooltip="Mute/Unmute Notifications">
       <span class="material-icons" (click)="muteNotification(canNotify)">
-        {{ canNotify?.isMute ? "volume_up" : "volume_off" }}
+        {{ canNotify?.isMute ? "volume_off" : "volume_up" }}
       </span>
     </button>
   </div>

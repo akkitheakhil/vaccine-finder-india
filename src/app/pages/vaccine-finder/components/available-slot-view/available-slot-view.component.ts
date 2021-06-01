@@ -104,7 +104,7 @@ export class AvailableSlotViewComponent implements OnInit {
 
   notify() {
     if (this.shouldNotify) {
-      this.facadeService.play();
+      this.facadeService.playNotification();
     }
     this.shouldNotify = false;
     setTimeout(() => {

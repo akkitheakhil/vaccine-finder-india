@@ -117,6 +117,18 @@ export class VaccineFinderFacadeService {
     return slots?.map((item) => item?.availableCapacity).reduce(reducer);
   }
 
+  playNotification(){
+    this.getNotificationSettings().pipe(switchMap((data) =>{
+      console.log(data.isMute)
+      if(data.isMute) {
+        return of();
+      } else {
+        this.play();
+        return of();
+      }
+    })).toPromise();
+  }
+
   play() {
     const audio = new Audio();
     audio.src = '/assets/audio/alert-notification.wav';
@@ -141,7 +153,7 @@ export class VaccineFinderFacadeService {
   }
 
   getFindByDistrictInit() {
-   return combineLatest([this.getSelectedState(), this.getSelectedDistrict(), this.getSelectedDate()]);
+   return combineLatest([this.getSelectedState(), this.getSelectedDistrict(), this.getSelectedDate(), this.getNotificationSettings()]);
   }
 
   getFindByPincode() {
