@@ -3,6 +3,7 @@ import { CountdownComponent } from 'ngx-countdown';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { isEmptyData } from 'src/app/shared/utils/common.util';
+import { VaccineFinderConstant } from '../../constants/vaccine-finder-constants.model';
 import { Districts } from '../../models/districts.model';
 import { States } from '../../models/states.model';
 import { VaccineFinderFacadeService } from '../../services/vaccine-finder-facade.service';
@@ -14,6 +15,8 @@ import { VaccineFinderFacadeService } from '../../services/vaccine-finder-facade
   styleUrls: ['./district.component.scss']
 })
 export class DistrictComponent implements OnInit, OnDestroy {
+
+  private _vaccineFinderConst = new VaccineFinderConstant();
 
   listOfStates$ = this.facadeService.getListOfStatesData();
   listOfDistricts$ = this.facadeService.getListOfDistrictsData();
@@ -38,6 +41,7 @@ export class DistrictComponent implements OnInit, OnDestroy {
   constructor(private facadeService: VaccineFinderFacadeService) { }
 
   ngOnInit(): void {
+    this.facadeService.setNewRoute(this._vaccineFinderConst._routes.byDistrict)
     this.facadeService.loadListOfStatesData();
     this.listenToPreviousChoice();
   }
@@ -92,7 +96,9 @@ export class DistrictComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
+    clearInterval(this.interval);
     this.$onDestroy.next();
     this.$onDestroy.complete();
   }
+
 }

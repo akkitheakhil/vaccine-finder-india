@@ -166,3 +166,9 @@ export const muteNotifications = createAction(
 );
 
 //#endregion
+
+
+export const saveCurrentRoute = createAction(
+  '[Vaccine] Vaccine Current Route',
+  props<{ data: any }>()
+);

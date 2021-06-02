@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountdownComponent } from 'ngx-countdown';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { VaccineFinderConstant } from '../../constants/vaccine-finder-constants.model';
 import { VaccineFinderFacadeService } from '../../services/vaccine-finder-facade.service';
 
@@ -10,7 +10,7 @@ import { VaccineFinderFacadeService } from '../../services/vaccine-finder-facade
   templateUrl: './pincode.component.html',
   styleUrls: ['./pincode.component.scss']
 })
-export class PincodeComponent implements OnInit {
+export class PincodeComponent implements OnInit, OnDestroy {
 
   private _vaccineFinderConst = new VaccineFinderConstant();
 
@@ -20,6 +20,7 @@ export class PincodeComponent implements OnInit {
   selectedDate = this.facadeService.getDefaultDate();
   selectedPincode: number = 0;
   $pincodeSelected = new Subject();
+  $OnDestry = new Subject();
 
   countDownConfig = {
     leftTime: 30,
@@ -35,6 +36,7 @@ export class PincodeComponent implements OnInit {
   constructor(private facadeService: VaccineFinderFacadeService) { }
 
   ngOnInit(): void {
+    this.facadeService.setNewRoute(this._vaccineFinderConst._routes.byPincode)
     this.listenToPincodeChanges();
   }
 
@@ -53,7 +55,7 @@ export class PincodeComponent implements OnInit {
   }
 
   newPincode() {
-    if(this.isValidPincode) {
+    if (this.isValidPincode) {
       this.$pincodeSelected.next(this.selectedPincode);
     }
   }
@@ -63,8 +65,14 @@ export class PincodeComponent implements OnInit {
   }
 
   listenToPincodeChanges() {
-    this.$pincodeSelected.pipe(debounceTime(400),distinctUntilChanged()).subscribe((data) => {
+    this.$pincodeSelected.pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.$OnDestry)).subscribe((data) => {
       this.facadeService.updateSelectedPincode(this.selectedPincode)
     })
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.interval);
+    this.$OnDestry.next();
+    this.$OnDestry.complete();
   }
 }

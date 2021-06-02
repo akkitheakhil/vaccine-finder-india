@@ -12,7 +12,8 @@ export const initialState: VaccineStoreState = {
   selectedDate: "",
   slotsAvailable: { sessions: [] },
   selectedPincode: 0,
-  isNotificationMute: { isMute: false }
+  isNotificationMute: { isMute: false },
+  currentRoute: "",
 };
 
 export const reducer = createReducer(
@@ -27,10 +28,17 @@ export const reducer = createReducer(
   on(VaccineActions.loadListOfDistrictsFailure, (state, { error }) => ({ ...state, districtsList: error })),
 
   // Selected State
-  on(VaccineActions.selectedState, (state, { data }) => ({ ...state, selectedState: data })),
+  on(VaccineActions.selectedState, (state, { data }) => ({
+    ...state,
+    selectedState: data,
+    })),
 
   // Selected District
-  on(VaccineActions.selectedDistrict, (state, { data }) => ({ ...state, selectedDistrict: data })),
+  on(VaccineActions.selectedDistrict, (state, { data }) => ({
+    ...state,
+    selectedDistrict: data,
+    slotsAvailable: { sessions: []}
+   })),
 
   // Selected District
   on(VaccineActions.selectedDate, (state, { data }) => ({ ...state, selectedDate: data })),
@@ -40,7 +48,11 @@ export const reducer = createReducer(
   on(VaccineActions.loadVaccineSlotsFailure, (state, { error }) => ({ ...state, slotsAvailable: error })),
 
   // Selected Pincode
-  on(VaccineActions.selectedPincode, (state, { data }) => ({ ...state, selectedPincode: data })),
+  on(VaccineActions.selectedPincode, (state, { data }) => ({
+    ...state,
+    selectedPincode: data,
+    slotsAvailable: { sessions: []}
+   })),
 
   // Load List of States reducer
   on(VaccineActions.hydrateSuccess, (state, { data }) =>
@@ -54,13 +66,17 @@ export const reducer = createReducer(
       selectedDate: data?.vaccine?.selectedDate,
       slotsAvailable: data?.vaccine?.slotsAvailable,
       selectedPincode: data?.vaccine?.selectedPincode,
-      isNotificationMute: data?.vaccine?.isNotificationMute || { isMute: false}
+      isNotificationMute: data?.vaccine?.isNotificationMute || { isMute: false},
+      currentRoute: data?.vaccine?.currentRoute || ""
     }
   }
   ),
   on(VaccineActions.loadVaccineSlotsFailure, (state, { error }) => ({ ...state, slotsAvailable: error })),
 
   on(VaccineActions.muteNotifications, (state, { data }) => ({ ...state, isNotificationMute: data })),
+
+  on(VaccineActions.saveCurrentRoute, (state, { data }) => ({ ...state, currentRoute: data })),
+
 
 );
 

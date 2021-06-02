@@ -7,19 +7,23 @@ import { of } from 'rxjs';
 import * as camelCaseRecursive from 'camelcase-keys-recursive';
 import { VaccineStoreState } from '../../models/store-state.model';
 import { Action, select, Store } from '@ngrx/store';
-import { SelectedState, SelectedDistrict, SelectedDate, SelectedPincode } from './vaccine.selectors';
+import { SelectedState, SelectedDistrict, SelectedDate, SelectedPincode, SelectCurrentRoute } from './vaccine.selectors';
 import { States } from '../../models/states.model';
-import { isEmptyData } from 'src/app/shared/utils/common.util';
+import { isEmptyData, isValidPinCode } from 'src/app/shared/utils/common.util';
 import { Districts } from '../../models/districts.model';
 import { CommonDateService } from 'src/app/shared/services/common-date.service';
+import { VaccineFinderConstant } from '../../constants/vaccine-finder-constants.model';
 
 @Injectable()
 export class VaccineEffects {
+
+  private _vaccineFinderConst = new VaccineFinderConstant();
 
   private _selectedState$ = this.store.select(SelectedState);
   private _selectedDistrict$ = this.store.select(SelectedDistrict);
   private _selectedDate$ = this.store.select(SelectedDate);
   private _selectedPincode$ = this.store.select(SelectedPincode);
+  private _currentRoute$ = this.store.select(SelectCurrentRoute);
 
   //#region Load List of States Effect
   /**
@@ -97,36 +101,22 @@ export class VaccineEffects {
   /**
    * Loads available slot for a district on date change
    */
-  loadAvailableSlotsOnDateChange$ = createEffect((): any => this.store.pipe(
-    select(SelectedDate),
-    withLatestFrom(this._selectedDistrict$),
-    filter((data: [string, Districts]) => {
-      return !isEmptyData(data[1]?.districtName) && !isEmptyData(data[0]);
+  loadAvailableSlotsOnDateChange$ = createEffect((): any => this.actions$.pipe(
+    ofType(VaccineActions.selectedDate),
+    withLatestFrom(this._selectedDate$, this._selectedDistrict$, this._selectedPincode$, this._currentRoute$),
+    filter((data: [Action, string, Districts, number, string]) => {
+      return (!isEmptyData(data[2]?.districtName) || isValidPinCode(data[3])) && !isEmptyData(data[1]);
     }),
-    mergeMap(() => [
-      VaccineActions.loadVaccineSlots(),
-    ]),
+    switchMap((data) => {
+      console.log(data[4])
+      if(this._vaccineFinderConst._routes.byDistrict === data[4]) {
+        return [VaccineActions.loadVaccineSlots()]
+      } else {
+        return [VaccineActions.loadVaccineSlotsByPincode()]
+      }
+    }),
     distinctUntilChanged()
   ));
-
-  //#endregion
-
-  //#region Load Available Slot Pincode
-  /**
-   * Loads available slot for a pincode when new pincode is selected
-   */
-  loadAvailableSlotPincodeOnDateChange$ = createEffect((): any => this.store.pipe(
-    select(SelectedDate),
-    withLatestFrom(this._selectedPincode$),
-    filter((data: [string, number]) => {
-      return (!isEmptyData(data[1]) && data[1] > 0 && data[1].toString().length === 6) && !isEmptyData(data[0]);
-    }),
-    mergeMap(() => [
-      VaccineActions.loadVaccineSlotsByPincode(),
-    ]),
-    distinctUntilChanged()
-  ));
-
   //#endregion
 
   //#region Load Vaccine Slot for District Effect

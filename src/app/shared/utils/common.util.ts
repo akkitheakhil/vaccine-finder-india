@@ -19,3 +19,7 @@
     return false;
   }
 };
+
+export const isValidPinCode =  (value: number): boolean => {
+  return (value > 0 && value.toString().length === 6)
+}

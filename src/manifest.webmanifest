@@ -1,8 +1,8 @@
 {
-  "name": "covid-vaccine-finder",
-  "short_name": "covid-vaccine-finder",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Covid Vaccine Finder",
+  "short_name": "Covid Vaccine Finder",
+  "theme_color": "#f5f5f5",
+  "background_color": "#f5f5f5",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

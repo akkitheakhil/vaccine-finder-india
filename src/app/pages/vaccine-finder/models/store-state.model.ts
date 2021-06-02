@@ -11,4 +11,5 @@ export interface VaccineStoreState {
   slotsAvailable: VaccineSlots,
   selectedPincode: number;
   isNotificationMute: {isMute: boolean};
+  currentRoute: string;
 }

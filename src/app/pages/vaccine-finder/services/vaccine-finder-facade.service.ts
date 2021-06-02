@@ -169,6 +169,10 @@ export class VaccineFinderFacadeService {
     this.store.dispatch(VaccineActions.muteNotifications({data: canNotify}));
   }
 
+  setNewRoute(routeName) {
+    this.store.dispatch(VaccineActions.saveCurrentRoute({data: routeName}));
+  }
+
   showSnackBar(message: string, action: string = '', duration: number = 3000) {
     this._snackBar.open(message, action, {
       duration

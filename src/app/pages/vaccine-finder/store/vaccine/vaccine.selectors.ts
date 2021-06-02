@@ -44,3 +44,8 @@ export const SelecteAvailableVaccineSlots = createSelector(selectVaccineFeature,
  * @description Select Notification Settings
  */
  export const SelectNotificationSettings = createSelector(selectVaccineFeature, (state: VaccineStoreState) => state?.isNotificationMute);
+
+/**
+ * @description Select current selected route
+ */
+ export const SelectCurrentRoute = createSelector(selectVaccineFeature, (state: VaccineStoreState) => state?.currentRoute);

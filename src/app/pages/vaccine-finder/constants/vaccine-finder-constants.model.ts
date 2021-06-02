@@ -27,4 +27,9 @@ export class VaccineFinderConstant {
   };
 
   public cowinPortalUrl: string = "https://selfregistration.cowin.gov.in/";
+
+  public _routes = {
+    byDistrict: "district",
+    byPincode: "pincode"
+  }
 }
