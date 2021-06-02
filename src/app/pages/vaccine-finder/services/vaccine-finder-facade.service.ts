@@ -104,7 +104,7 @@ export class VaccineFinderFacadeService {
       const total = this.calculateTotalSlots(slots?.sessions);
       const availableSlotsData: AvailableSlotData = {
         totalSlotsAvailable: total || 0,
-        slotsDetails: slots?.sessions.map((item) => item).sort((a,b) => (a.availableCapacity > b.availableCapacity) ? -1 : ((b.availableCapacity > a.availableCapacity) ? 1 : 0))
+        slotsDetails: slots?.sessions?.map((item) => item).sort((a,b) => (a.availableCapacity > b.availableCapacity) ? -1 : ((b.availableCapacity > a.availableCapacity) ? 1 : 0))
       }
       return availableSlotsData;
     }));
